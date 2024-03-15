@@ -20,9 +20,9 @@ INSERT INTO orders (customer_id, order_info)
 values ((SELECT customer_id FROM customers where name = 'Callahan Auto'), '200 Widgets');
 
 INSERT INTO users (username, password, enabled)
-values ('user', 'password', true);
+values ('user', '{bcrypt}$2a$10$XlkdPQQhYcolx8bgp6nL3uNvDs8ZwDXA4KFaDencZsIhjMQO3j5lq', true);
 INSERT INTO users (username, password, enabled)
-values ('admin', 'password', true);
+values ('admin', '{bcrypt}$2a$10$XlkdPQQhYcolx8bgp6nL3uNvDs8ZwDXA4KFaDencZsIhjMQO3j5lq', true);
 
 INSERT INTO authorities (username, authority)
 values ('user', 'ROLE_USER');
