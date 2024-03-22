@@ -28,6 +28,8 @@ cn: user
 sn: user
 uid: user
 userPassword: $2a$10$biqH/BsLZapkRlftOWwvz.o1Gye8R6eJFN4dp2YCaWvyTgMbFy8ui
+#userPassword: $2y$10$iyYwFG9gU5RoRXVJVJ0wNurnhBSXyCHUV5jmV7p.UJ93AEEPIZuYm
+#userPassword: david
 
 
 dn: uid=admin,ou=people,dc=landon,dc=org
@@ -39,7 +41,7 @@ cn: admin
 sn: admin
 uid: admin
 userPassword: $2a$10$biqH/BsLZapkRlftOWwvz.o1Gye8R6eJFN4dp2YCaWvyTgMbFy8ui
-
+#userPassword: {bcrypt}$2a$10$biqH/BsLZapkRlftOWwvz.o1Gye8R6eJFN4dp2YCaWvyTgMbFy8ui
 
 dn: cn=admin,ou=groups,dc=landon,dc=org
 objectclass: top
