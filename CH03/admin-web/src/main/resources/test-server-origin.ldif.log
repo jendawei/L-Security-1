@@ -1,0 +1,81 @@
+#!RESULT OK
+#!CONNECTION ldap://localhost:10389
+#!DATE 2024-03-22T18:38:50.407
+dn: dc=landon,dc=org
+objectclass: top
+objectclass: domain
+objectclass: extensibleObject
+dc: landon
+
+#!RESULT OK
+#!CONNECTION ldap://localhost:10389
+#!DATE 2024-03-22T18:38:50.421
+dn: ou=groups,dc=landon,dc=org
+objectclass: top
+objectclass: organizationalUnit
+ou: groups
+
+#!RESULT OK
+#!CONNECTION ldap://localhost:10389
+#!DATE 2024-03-22T18:38:50.429
+dn: ou=subgroups,ou=groups,dc=landon,dc=org
+objectclass: top
+objectclass: organizationalUnit
+ou: subgroups
+
+#!RESULT OK
+#!CONNECTION ldap://localhost:10389
+#!DATE 2024-03-22T18:38:50.441
+dn: ou=people,dc=landon,dc=org
+objectclass: top
+objectclass: organizationalUnit
+ou: people
+
+#!RESULT OK
+#!CONNECTION ldap://localhost:10389
+#!DATE 2024-03-22T18:38:50.451
+dn: uid=user,ou=people,dc=landon,dc=org
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: user
+sn: user
+uid: user
+userPassword: $2a$10$biqH/BsLZapkRlftOWwvz.o1Gye8R6eJFN4dp2YCaWvyTgMbFy8ui
+
+
+#!RESULT OK
+#!CONNECTION ldap://localhost:10389
+#!DATE 2024-03-22T18:38:50.458
+dn: uid=admin,ou=people,dc=landon,dc=org
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: admin
+sn: admin
+uid: admin
+userPassword: $2a$10$biqH/BsLZapkRlftOWwvz.o1Gye8R6eJFN4dp2YCaWvyTgMbFy8ui
+
+
+#!RESULT OK
+#!CONNECTION ldap://localhost:10389
+#!DATE 2024-03-22T18:38:50.468
+dn: cn=admin,ou=groups,dc=landon,dc=org
+objectclass: top
+objectclass: groupOfUniqueNames
+cn: admin
+ou: admin
+uniqueMember: uid=admin,ou=people,dc=landon,dc=org
+
+#!RESULT OK
+#!CONNECTION ldap://localhost:10389
+#!DATE 2024-03-22T18:38:50.477
+dn: cn=user,ou=groups,dc=landon,dc=org
+objectclass: top
+objectclass: groupOfUniqueNames
+cn: user
+ou: user
+uniqueMember: uid=admin,ou=people,dc=landon,dc=org
+uniqueMember: uid=user,ou=people,dc=landon,dc=org

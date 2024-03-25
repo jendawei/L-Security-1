@@ -1,0 +1,49 @@
+#!RESULT OK
+#!CONNECTION ldap://localhost:10389
+#!DATE 2024-03-22T18:35:12.193
+dn: dc=landon,dc=org
+objectclass: top
+objectclass: domain
+objectclass: extensibleObject
+dc: landon
+
+#!RESULT OK
+#!CONNECTION ldap://localhost:10389
+#!DATE 2024-03-22T18:35:12.202
+dn: ou=groups,dc=landon,dc=org
+objectclass: top
+objectclass: organizationalUnit
+ou: groups
+
+#!RESULT OK
+#!CONNECTION ldap://localhost:10389
+#!DATE 2024-03-22T18:35:12.210
+dn: ou=subgroups,ou=groups,dc=landon,dc=org
+objectclass: top
+objectclass: organizationalUnit
+ou: subgroups
+
+#!RESULT OK
+#!CONNECTION ldap://localhost:10389
+#!DATE 2024-03-22T18:35:12.217
+dn: ou=people,dc=landon,dc=org
+objectclass: top
+objectclass: organizationalUnit
+ou: people
+
+#!RESULT ERROR
+#!CONNECTION ldap://localhost:10389
+#!DATE 2024-03-22T18:35:12.219
+#!ERROR  [LDAP result code 16 - noSuchAttribute] NO_SUCH_ATTRIBUTE: failed for MessageType : ADD_REQUEST Message ID : 17     Add Request : Entry     dn: uid=user,ou=people,dc=landon,dc=org     objectclass: top     objectclass: person     objectclass: organizationalPerson     objectclass: inetOrgPerson     #userPassword: $2y$10$iyYwFG9gU5RoRXVJVJ0wNurnhBSXyCHUV5jmV7p.UJ93AEEPIZuYm: UNKNOWN     uid: user     cn: user     sn: user     #userPassword: david: UNKNOWN     userPassword: 0x24 0x32 0x61 0x24 0x31 0x30 0x24 0x62 0x69 0x71 0x48 0x2F 0x42 0x73 0x4C 0x5A ... : ERR_13735_ELEMENT_FOR_OID_DOES_NOT_EXIST ATTRIBUTE_TYPE for OID #userpassword: $2y$10$iyywfg9gu5rorxvjvj0wnurnhbsxychuv5jmv7p.uj93aeepizuym does not exist!
+dn: uid=user,ou=people,dc=landon,dc=org
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: user
+sn: user
+uid: user
+userPassword: $2a$10$biqH/BsLZapkRlftOWwvz.o1Gye8R6eJFN4dp2YCaWvyTgMbFy8ui
+#userPassword: $2y$10$iyYwFG9gU5RoRXVJVJ0wNurnhBSXyCHUV5jmV7p.UJ93AEEPIZuYm
+#userPassword: david
+
