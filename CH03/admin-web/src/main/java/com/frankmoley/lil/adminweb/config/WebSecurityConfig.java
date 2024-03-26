@@ -12,6 +12,7 @@ import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMap
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.LdapShaPasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 
 @Configuration
@@ -46,10 +47,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .userDnPatterns("uid={0},ou=people")
                 .groupSearchBase("ou=groups")
                 .contextSource()
-                .url("ldap://localhost:8389/dc=landon,dc=org")
+                .url("ldap://localhost:10389/dc=example,dc=com")
                 .and()
                 .passwordCompare()
-                .passwordEncoder(new BCryptPasswordEncoder())
+                //.passwordEncoder(new BCryptPasswordEncoder())
+                .passwordEncoder(new LdapShaPasswordEncoder())
+                //Sha512PasswordEncoder
+                .passwordAttribute("userPassword");
+
+        auth.ldapAuthentication()
+                .userDnPatterns("uid={0},ou=people")
+                .groupSearchBase("ou=groups")
+                .contextSource()
+                .url("ldap://localhost:10389/dc=landon,dc=org")
+                .and()
+                .passwordCompare()
+                //.passwordEncoder(new BCryptPasswordEncoder())
+                .passwordEncoder(new LdapShaPasswordEncoder())
+                //Sha512PasswordEncoder
                 .passwordAttribute("userPassword");
     }
 
