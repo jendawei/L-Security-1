@@ -20,9 +20,19 @@ INSERT INTO orders (customer_id, order_info)
 values ((SELECT customer_id FROM customers where name = 'Callahan Auto'), '200 Widgets');
 
 INSERT INTO users (username, password, enabled)
-values ('user', '{bcrypt}$2a$10$XlkdPQQhYcolx8bgp6nL3uNvDs8ZwDXA4KFaDencZsIhjMQO3j5lq', true);
+--values ('user', '{bcrypt}$2a$10$XlkdPQQhYcolx8bgp6nL3uNvDs8ZwDXA4KFaDencZsIhjMQO3j5lq', true);
+values ('user', '$2a$10$XlkdPQQhYcolx8bgp6nL3uNvDs8ZwDXA4KFaDencZsIhjMQO3j5lq', true);
 INSERT INTO users (username, password, enabled)
-values ('admin', '{bcrypt}$2a$10$XlkdPQQhYcolx8bgp6nL3uNvDs8ZwDXA4KFaDencZsIhjMQO3j5lq', true);
+--values ('admin', '{bcrypt}$2a$10$XlkdPQQhYcolx8bgp6nL3uNvDs8ZwDXA4KFaDencZsIhjMQO3j5lq', true);
+values ('admin', '$2a$10$XlkdPQQhYcolx8bgp6nL3uNvDs8ZwDXA4KFaDencZsIhjMQO3j5lq', true);
+
+INSERT INTO users (username, password, enabled)
+values ('david', '$2a$10$jyX4RlL0H9EWlJVpGagFau2/jHPrHksHS2jMmujPJ1vztfSHU7rzy', true);
+
+--create a duplicate user to monitor how Spring Security behaves when multiple authentication providers are used.
+--The password is different from the one in LDAP.
+INSERT INTO users (username, password, enabled)
+values ('adminLdap', '$2a$10$ATR/jW94UdOd8ovf7jnSHOAupJduo8mxWiIdzBp8Lp9BRlSPLGGAy', true);
 
 INSERT INTO authorities (username, authority)
 values ('user', 'ROLE_USER');
@@ -30,3 +40,14 @@ INSERT INTO authorities (username, authority)
 values ('admin', 'ROLE_USER');
 INSERT INTO authorities (username, authority)
 values ('admin', 'ROLE_ADMIN');
+
+INSERT INTO authorities (username, authority)
+values ('david', 'ROLE_USER');
+--Added to verify whether the data is used by "authoritiesMapper()"
+INSERT INTO authorities (username, authority)
+values ('david', 'ADMIN');
+
+--grant different(from LDAP) role to adminLdap. In LDAP, adminLdap has ROLE_ADMIN role too.
+INSERT INTO authorities (username, authority)
+values ('adminLdap', 'ROLE_USER');
+
