@@ -44,8 +44,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         //
-        addJdbcAuthentication(auth);
+        //addJdbcAuthentication(auth);
         addLdapAuthentication(auth);
+        addJdbcAuthentication(auth);
     }
 
     private void addLdapAuthentication(AuthenticationManagerBuilder auth) throws Exception {
