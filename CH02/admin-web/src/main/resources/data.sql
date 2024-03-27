@@ -30,9 +30,10 @@ INSERT INTO users (username, password, enabled)
 values ('david', '$2a$10$jyX4RlL0H9EWlJVpGagFau2/jHPrHksHS2jMmujPJ1vztfSHU7rzy', true);
 
 --create a duplicate user to monitor how Spring Security behaves when multiple authentication providers are used.
---The password is different from the one in LDAP.
 INSERT INTO users (username, password, enabled)
+--The password is different from the one in LDAP.
 --values ('adminLdap', '$2a$10$ATR/jW94UdOd8ovf7jnSHOAupJduo8mxWiIdzBp8Lp9BRlSPLGGAy', true);
+--The password is the same with the one in LDAP.
 values ('adminLdap', '$2a$10$XlkdPQQhYcolx8bgp6nL3uNvDs8ZwDXA4KFaDencZsIhjMQO3j5lq', true);
 
 INSERT INTO authorities (username, authority)
