@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
+import org.springframework.security.core.userdetails.UserDetailsPasswordService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
@@ -46,7 +47,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //
         //addJdbcAuthentication(auth);
         addLdapAuthentication(auth);
-        addJdbcAuthentication(auth);
+        //addJdbcAuthentication(auth);
+        addDaoAuthentication(auth);
     }
 
     private void addLdapAuthentication(AuthenticationManagerBuilder auth) throws Exception {
@@ -64,6 +66,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private void addJdbcAuthentication(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
+                //.usersByUsernameQuery("select username, password, enabled from users where username=?")
+                //.authoritiesByUsernameQuery("select username, authority from authorities where username=?")
+                .passwordEncoder(new BCryptPasswordEncoder())
+        ;
+    }
+
+    private void addDaoAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(new JdbcUserDetailsManager(dataSource))
+    //userDetailsPasswordManager((UserDetailsPasswordService) new JdbcUserDetailsManager(dataSource))
+                //.dataSource(dataSource)
                 //.usersByUsernameQuery("select username, password, enabled from users where username=?")
                 //.authoritiesByUsernameQuery("select username, authority from authorities where username=?")
                 .passwordEncoder(new BCryptPasswordEncoder())
