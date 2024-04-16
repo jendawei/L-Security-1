@@ -5,6 +5,8 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.ldap.core.LdapTemplate;
+import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -55,9 +57,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.ldapAuthentication()
                 .userDnPatterns("uid={0},ou=people")
                 .groupSearchBase("ou=groups")
-                .contextSource()
-                .url("ldap://localhost:8389/dc=landon,dc=org")
-                .and()
+                //.contextSource()
+                .contextSource(contextSource())
+                //.url("ldap://localhost:8389/dc=landon,dc=org")
+                //.and()
                 .passwordCompare()
                 .passwordEncoder(new BCryptPasswordEncoder())
                 .passwordAttribute("userPassword");
@@ -82,7 +85,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         ;
     }
 
-
     @Autowired
     private DataSource dataSource;
 
@@ -98,5 +100,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         SimpleAuthorityMapper authorityMapper = new SimpleAuthorityMapper();
         authorityMapper.setConvertToUpperCase(true);
         return authorityMapper;
+    }
+
+    @Bean
+    public LdapContextSource contextSource() {
+        LdapContextSource contextSource = new LdapContextSource();
+
+        /*
+        .contextSource()
+                .url("ldap://localhost:8389/dc=landon,dc=org")
+         */
+        contextSource.setUrl("ldap://localhost:8389/dc=landon,dc=org");
+       /* contextSource.setBase(
+                env.getRequiredProperty("ldap.partitionSuffix"));
+        contextSource.setUserDn(
+                env.getRequiredProperty("ldap.principal"));
+        contextSource.setPassword(
+                env.getRequiredProperty("ldap.password"));*/
+
+        return contextSource;
+    }
+
+    @Bean
+    public LdapTemplate ldapTemplate() {
+        return new LdapTemplate(contextSource());
     }
 }
