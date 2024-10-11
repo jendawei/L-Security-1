@@ -15,7 +15,11 @@ import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper
 import org.springframework.security.core.userdetails.UserDetailsPasswordService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.ldap.userdetails.UserDetailsContextMapper;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
+
+import com.frankmoley.lil.adminweb.bean.CustomUserDetailsContextMapper;
+
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 
 @Configuration
@@ -26,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/home").permitAll()
+                .antMatchers("/", "/home", "/demo/**").permitAll()
                 .antMatchers("/customers/**").hasRole("USER")
                 .antMatchers("/orders").hasRole("ADMIN")
                 .anyRequest().authenticated()
@@ -57,8 +61,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.ldapAuthentication()
                 .userDnPatterns("uid={0},ou=people")
                 .groupSearchBase("ou=groups")
+                .userDetailsContextMapper(userDetailsContextMapper())
                 //.contextSource()
-                .contextSource(contextSource())
+                .contextSource(ldapContextSource)
                 //.url("ldap://localhost:8389/dc=landon,dc=org")
                 //.and()
                 .passwordCompare()
@@ -95,34 +100,41 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
      */
 
-    @Bean
+    //@Bean
+    /*
     public GrantedAuthoritiesMapper authoritiesMapper() {
         SimpleAuthorityMapper authorityMapper = new SimpleAuthorityMapper();
         authorityMapper.setConvertToUpperCase(true);
         return authorityMapper;
-    }
+    }*/
 
+//    @Bean
+//    public LdapContextSource contextSource() {
+//        LdapContextSource contextSource = new LdapContextSource();
+//
+//        /*
+//        .contextSource()
+//                .url("ldap://localhost:8389/dc=landon,dc=org")
+//         */
+//        contextSource.setUrl("ldap://localhost:8389/dc=landon,dc=org");
+//       /* contextSource.setBase(
+//                env.getRequiredProperty("ldap.partitionSuffix"));
+//        contextSource.setUserDn(
+//                env.getRequiredProperty("ldap.principal"));
+//        contextSource.setPassword(
+//                env.getRequiredProperty("ldap.password"));*/
+//
+//        return contextSource;
+//    }
+
+    @Autowired
+	LdapContextSource ldapContextSource;
+    
+    
     @Bean
-    public LdapContextSource contextSource() {
-        LdapContextSource contextSource = new LdapContextSource();
-
-        /*
-        .contextSource()
-                .url("ldap://localhost:8389/dc=landon,dc=org")
-         */
-        contextSource.setUrl("ldap://localhost:8389/dc=landon,dc=org");
-       /* contextSource.setBase(
-                env.getRequiredProperty("ldap.partitionSuffix"));
-        contextSource.setUserDn(
-                env.getRequiredProperty("ldap.principal"));
-        contextSource.setPassword(
-                env.getRequiredProperty("ldap.password"));*/
-
-        return contextSource;
-    }
-
-    @Bean
-    public LdapTemplate ldapTemplate() {
-        return new LdapTemplate(contextSource());
+    public UserDetailsContextMapper userDetailsContextMapper() {
+    	CustomUserDetailsContextMapper contextMapper = new CustomUserDetailsContextMapper();
+        
+        return contextMapper;
     }
 }
