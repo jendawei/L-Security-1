@@ -53,9 +53,7 @@ public class MapContextMapper implements ContextMapper<Map<String, Object>>{
 			_attrNames.addAll(attrNames);
 		}
        
-//for (String attrName : _attrNames) {
-//			attributes.put(attrName, context.getObjectAttribute(attrName));
-//		}
+		attrMap.put("dn", context.getDn().toString());
         
 		for (String attrName : _attrNames) {
 			 //List<Object> values = new ArrayList<>();

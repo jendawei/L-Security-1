@@ -3,6 +3,7 @@ package com.frankmoley.lil.adminweb.config;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.ldap.core.LdapTemplate;
@@ -20,6 +21,7 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 
 import com.frankmoley.lil.adminweb.bean.CustomUserDetailsContextMapper;
 
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 
 @Configuration
@@ -57,18 +59,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         addDaoAuthentication(auth);
     }
 
-    private void addLdapAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+    private void addLdapAuthentication_old(AuthenticationManagerBuilder auth) throws Exception {
         auth.ldapAuthentication()
                 .userDnPatterns("uid={0},ou=people")
                 .groupSearchBase("ou=groups")
-                .userDetailsContextMapper(userDetailsContextMapper())
+                .userDetailsContextMapper(userDetailsContextMapper)
                 //.contextSource()
-                .contextSource(ldapContextSource)
-                //.url("ldap://localhost:8389/dc=landon,dc=org")
-                //.and()
-                .passwordCompare()
-                .passwordEncoder(new BCryptPasswordEncoder())
-                .passwordAttribute("userPassword");
+                .contextSource(ldapContextSource);
+     
+    }
+    
+    private void addLdapAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+    	/*StringBuilder queryBuffer = new StringBuilder().append(
+    			"(&(objectclass=").append(userObjectClass).append(")(").append(userIdAttribute).append("={0}").append("))");*/
+        auth.ldapAuthentication()
+                //.userSearchFilter("(&(objectClass=inetOrgPerson)(uid={0}))")
+                .userSearchFilter(ldapSearhFilter)
+                .userDetailsContextMapper(userDetailsContextMapper)
+                .contextSource(ldapContextSource);
     }
 
     private void addJdbcAuthentication(AuthenticationManagerBuilder auth) throws Exception {
@@ -93,48 +101,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
-    /*
-    @Bean
-    public UserDetailsService users(DataSource dataSource) {
-        return new JdbcUserDetailsManager(dataSource);
-    }
-     */
-
-    //@Bean
-    /*
-    public GrantedAuthoritiesMapper authoritiesMapper() {
-        SimpleAuthorityMapper authorityMapper = new SimpleAuthorityMapper();
-        authorityMapper.setConvertToUpperCase(true);
-        return authorityMapper;
-    }*/
-
-//    @Bean
-//    public LdapContextSource contextSource() {
-//        LdapContextSource contextSource = new LdapContextSource();
-//
-//        /*
-//        .contextSource()
-//                .url("ldap://localhost:8389/dc=landon,dc=org")
-//         */
-//        contextSource.setUrl("ldap://localhost:8389/dc=landon,dc=org");
-//       /* contextSource.setBase(
-//                env.getRequiredProperty("ldap.partitionSuffix"));
-//        contextSource.setUserDn(
-//                env.getRequiredProperty("ldap.principal"));
-//        contextSource.setPassword(
-//                env.getRequiredProperty("ldap.password"));*/
-//
-//        return contextSource;
-//    }
-
     @Autowired
 	LdapContextSource ldapContextSource;
     
+    @Autowired
+	CustomUserDetailsContextMapper userDetailsContextMapper;
     
+    @Value("${ldap.searhFilter:}")
+	private String ldapSearhFilter;
+    
+    @Value("${ldap.userObjectClass:inetOrgPerson}")
+    private String userObjectClass;
+    
+    @Value("${ldap.userIdAttribute:cn}")
+    private String userIdAttribute;
+    
+    @Override
     @Bean
-    public UserDetailsContextMapper userDetailsContextMapper() {
-    	CustomUserDetailsContextMapper contextMapper = new CustomUserDetailsContextMapper();
-        
-        return contextMapper;
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
+    
 }
